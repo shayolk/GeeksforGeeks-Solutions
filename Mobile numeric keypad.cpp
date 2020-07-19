@@ -97,6 +97,6 @@ signed main() {
 		scanf("%lld", &n);
 		printf("%lld\n", pref[n]);
 	}
- 
+	
 	return 0;
 }
