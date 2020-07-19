@@ -93,9 +93,9 @@ signed main() {
 	int t;
 	scanf("%lld", &t);
 	while(t--) {
-	    int n;
-	    scanf("%lld", &n);
-	    printf("%lld\n", pref[n]);
+		int n;
+		scanf("%lld", &n);
+		printf("%lld\n", pref[n]);
 	}
  
     return 0;
