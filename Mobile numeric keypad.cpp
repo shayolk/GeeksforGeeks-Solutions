@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define int long long
-
 vector<vector<int>> neb;
 
 void init() {
@@ -65,8 +63,8 @@ void init() {
 }
 
 const int nax=32;
-vector<vector<int>> dp(nax, vector<int> (10));
-vector<int> pref(nax);
+vector<vector<long long>> dp(nax, vector<long long> (10));
+vector<long long> pref(nax);
 
 void build() {
     for(int j=0; j<10; ++j) {
@@ -87,16 +85,16 @@ void build() {
     }
 }
  
-signed main() {
+int main() {
     init();
     build();
 	int t;
-	scanf("%lld", &t);
+	scanf("%d", &t);
 	while(t--) {
-		int n;
-		scanf("%lld", &n);
-		printf("%lld\n", pref[n]);
+	    int n;
+	    scanf("%d", &n);
+	    printf("%lld\n", pref[n]);
 	}
-	
-	return 0;
+ 
+    return 0;
 }
