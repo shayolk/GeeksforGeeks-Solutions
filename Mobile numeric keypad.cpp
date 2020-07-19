@@ -98,5 +98,5 @@ signed main() {
 		printf("%lld\n", pref[n]);
 	}
  
-    return 0;
+	return 0;
 }
