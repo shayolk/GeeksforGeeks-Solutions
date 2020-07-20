@@ -12,13 +12,15 @@ int main() {
         int mn=x, mx=x;
         for(int i=1; i<n; ++i) {
             scanf("%d", &x);
-            if(x<mn) {
-                mn=x;
-            }
-            else {
-                mx=x;
-                diff=max(diff, mx-mn);
-            }
+            // if(x<mn) {
+            //     mn=x;
+            // }
+            // else {
+            //     mx=x;
+            //     diff=max(diff, mx-mn);
+            // }
+            diff=max(diff, x-mn);
+            mn=min(mn,x);
         }
         printf("%d\n", diff?diff:-1);
     }
