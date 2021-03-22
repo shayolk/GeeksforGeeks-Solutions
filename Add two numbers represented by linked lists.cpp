@@ -1,3 +1,60 @@
+#warning Method-1
+
+/* node for linked list:
+
+struct Node {
+    int data;
+    struct Node* next;
+    Node(int x) {
+        data = x;
+        next = NULL;
+    }
+};
+
+*/
+
+class Solution
+{
+    Node* add(Node* a, Node* b, int& c, int k) {
+        if(!a && !b) {
+            return NULL;
+        }
+        Node* t=new Node(0);
+        t->next=add(a->next, k?b:b->next, c, k?k-1:k);
+        int sum=c+(a->data)+(k?0:b->data);
+        t->data=sum%10;
+        c=sum/10;
+        return t;
+    }
+    
+    public:
+    //Function to add two numbers represented by linked list.
+    struct Node* addTwoLists(struct Node* first, struct Node* second)
+    {
+        auto len=[&](Node* t) {
+            int l=0;
+            while(t) {
+                ++l;
+                t=t->next;
+            }
+            return l;
+        };
+        int a=len(first), b=len(second);
+        int c=0;
+        Node* head=add(a>b?first:second, a>b?second:first, c, abs(a-b));
+        if(c) {
+            Node* t=new Node(c);
+            t->next=head;
+            head=t;
+        }
+        return head;
+    }
+};
+
+
+
+#warning Method-2
+
 /* node for linked list:
 
 struct Node {
