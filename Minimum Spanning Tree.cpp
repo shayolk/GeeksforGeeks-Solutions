@@ -1,36 +1,31 @@
-// Function to construct and print MST for
-// a graph represented using adjacency
-// matrix representation, with V vertices.
-// graph[i][j] = weight if edge exits else INT_MAX
-int spanningTree(int v, int e, vector<vector<int>> &graph) {
-    // code here
-    vector<bool> done(v);
-    done[0]=true;
-    vector<int> par(v);
-    par[0]=0;
-    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> p;
-    for(int j=1; j<v; ++j) {
-        par[j]=j;
-        p.push({graph[0][j], j});
-        if(graph[0][j]!=INT_MAX) {
-            par[j]=0;
-        }
-    }
-    int wt=0, last=0;
-    while(!p.empty()) {
-        pair<int,int> pr=p.top();
-        p.pop();
-        last=pr.second;
-        if(done[last]) continue;
-        // wt+=graph[par[last]][last];
-        wt+=pr.first;
-        done[last]=true;
-        for(int j=0; j<v; ++j) {
-            if(!done[j] && graph[last][j]!=INT_MAX && graph[last][j]<graph[par[j]][j]) {
-                p.push({graph[last][j], j});
-                par[j]=last;
+class Solution
+{
+	public:
+	//Function to find sum of weights of edges of the Minimum Spanning Tree.
+    int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        int ans=0;
+        vector<int> dist(V, 2e9+5);
+        vector<bool> vis(V);
+        dist[0]=0;
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> p;
+        p.push({0,0});
+        while(!p.empty()) {
+            pair<int,int> t=p.top();
+            p.pop();
+            int wt=t.first, now=t.second;
+            if(vis[now]) {
+                continue;
+            }
+            vis[now]=true;
+            ans+=wt;
+            for(auto neb: adj[now]) {
+                if(!vis[neb[0]] && neb[1]<dist[neb[0]]) {
+                    dist[neb[0]]=neb[1];
+                    p.push({neb[1], neb[0]});
+                }
             }
         }
+        return ans;
     }
-    return wt;
-}
+};
