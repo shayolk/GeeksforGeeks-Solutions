@@ -1,40 +1,43 @@
-/*The function takes an array of heights, width and 
-length as its 3 arguments where each index i value 
-determines the height, width, length of the ith box. 
-Here n is the total no of boxes.*/
-
-bool comp(const pair<int,pair<int,int>>& a, const pair<int,pair<int,int>>& b) {
-    return a.second.first*a.second.second < b.second.first*b.second.second;
-}
-
-int maxHeight(int height[],int width[],int length[],int n)
-{
-    vector<pair<int,pair<int,int>>> a;
-    for(int i=0; i<n; ++i) {
-        int x=height[i];
-        int y=width[i];
-        int z=length[i];
-        a.push_back({x,{min(y,z), max(y,z)}});
-        a.push_back({y,{min(z,x), max(z,x)}});
-        a.push_back({z,{min(x,y), max(x,y)}});
-    }
-    sort(a.begin(), a.end(), comp);
-    n=(int)a.size();
-    vector<int> dp(n);
-    dp[0]=a[0].first;
-    for(int i=1; i<n; ++i) {
-        dp[i]=a[i].first;
-        for(int j=0; j<i; ++j) {
-            // if(a[i].first>a[j].first && a[i].second.first>a[j].second.first) {
-            //     dp[i]=max(dp[i], a[i].second.second+dp[j]);
-            // }
-            if(a[i].second.first>a[j].second.first && a[i].second.second>a[j].second.second) {
-                dp[i]=max(dp[i], a[i].first+dp[j]);
-            }
-            // if(a[i].second.second>a[j].second.second && a[i].first>a[j].first) {
-            //     dp[i]=max(dp[i], a[i].second.first+dp[j]);
-            // }
+class Solution{
+    struct box {
+        int l,b,h;
+        box(int l=0, int b=0, int h=0) {
+            this->l=l;
+            this->b=b;
+            this->h=h;
         }
+        bool operator < (const box& a) const {
+            return l*b<a.l*a.b;
+        }
+    };
+    
+    public:
+    /*The function takes an array of heights, width and 
+    length as its 3 arguments where each index i value 
+    determines the height, width, length of the ith box. 
+    Here n is the total no of boxes.*/
+    int maxHeight(int height[],int width[],int length[],int n)
+    {
+        vector<box> a;
+        for(int i=0; i<n; ++i) {
+            int h=height[i], w=width[i], l=length[i];
+            a.push_back(box(min(h, w), max(h, w), l));
+            a.push_back(box(min(l, w), max(l, w), h));
+            a.push_back(box(min(h, l), max(h, l), w));
+        }
+        sort(a.rbegin(), a.rend());
+        int ans=a[0].h, m=a.size();
+        vector<int> dp(m);
+        dp[0]=a[0].h;
+        for(int i=1; i<m; ++i) {
+            dp[i]=a[i].h;
+            for(int j=0; j<i; ++j) {
+                if(a[j].l>a[i].l && a[j].b>a[i].b) {
+                    dp[i]=max(dp[i], dp[j]+a[i].h);
+                }
+            }
+            ans=max(ans, dp[i]);
+        }
+        return ans;
     }
-    return *max_element(dp.begin(), dp.end());
-}
+};
