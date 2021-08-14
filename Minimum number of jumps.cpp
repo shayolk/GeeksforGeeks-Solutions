@@ -1,29 +1,24 @@
-#include <bits/stdc++.h>
-using namespace std;
- 
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        vector<int> a(n);
-        for(int i=0; i<n; ++i) {
-            scanf("%d", &a[i]);
-        }
-        vector<int> dp(n, 2e9);
-        dp[0]=0;
+// Function to return minimum number of jumps to end of array
+
+class Solution{
+    const int INF=1e9+5;
+    
+  public:
+    int minJumps(int arr[], int n){
+        int mx=0, cur=0, jumps=0;
         for(int i=0; i<n-1; ++i) {
-            for(int j=1; j<=a[i] && i+j<n; ++j) {
-                dp[i+j]=min(dp[i+j], 1+dp[i]);
+            mx=max(mx, i+arr[i]);
+            if(i==cur) {
+                ++jumps;
+                cur=mx;
+            }
+            if(cur>=n-1) {
+                break;
             }
         }
-        if(dp[n-1]==2e9) {
-            printf("-1\n");
-            continue;
+        if(cur<n-1) {
+            return -1;
         }
-        printf("%d\n", dp[n-1]);
+        return jumps;
     }
- 
-    return 0;
-}
+};
