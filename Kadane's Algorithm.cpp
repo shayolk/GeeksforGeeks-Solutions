@@ -1,20 +1,14 @@
-#include <bits/stdc++.h>
-using namespace std;
- 
-int main() {
-  int t;
-  scanf("%d", &t);
-  while(t--) {
-      int n;
-      scanf("%d", &n);
-      int mx=-2e9, so=0, x;
-      for(int i=0; i<n; ++i) {
-          scanf("%d", &x);
-          so=max(x, so+x);
-          mx=max(mx, so);
-      }
-      printf("%d\n", mx);
-  }
- 
-    return 0;
-}
+class Solution{
+    public:
+    // arr: input array
+    // n: size of array
+    //Function to find the sum of contiguous subarray with maximum sum.
+    int maxSubarraySum(int arr[], int n){
+        int ans=-1e9-5, so=0;
+        for(int i=0; i<n; ++i) {
+            so=max(arr[i], so+arr[i]);
+            ans=max(ans, so);
+        }
+        return ans;
+    }
+};
