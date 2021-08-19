@@ -1,35 +1,27 @@
-#include <bits/stdc++.h>
-using namespace std;
+// User function Template for C++
 
-#define fr first
-#define sc second
- 
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n,m;
-        scanf("%d%d", &n,&m);
-        vector<vector<int>> a(n, vector<int> (m)), pref(n, vector<int> (m+1));
-        for(int i=0; i<n; ++i) {
-            for(int j=0; j<m; ++j) {
-                scanf("%d", &a[i][j]);
-                pref[i][j+1]=pref[i][j]+a[i][j];
+class Solution {
+  public:
+    int maximumSumRectangle(int R, int C, vector<vector<int>> M) {
+        int pref[R][C+1];
+        memset(pref, 0, sizeof(pref));
+        for(int i=0; i<R; ++i) {
+            for(int j=0; j<C; ++j) {
+                pref[i][j+1]=pref[i][j]+M[i][j];
             }
         }
-        int ans=-2e9;
-        for(int gap=0; gap<m; ++gap) {
-            for(int i=1; i+gap<=m; ++i) {
-                int j=i+gap;
-                int so=0;
-                for(int row=0; row<n; ++row) {
-                    so=max(so+pref[row][j]-pref[row][i-1], pref[row][j]-pref[row][i-1]);
-                    ans=max(ans, so);
+        int ans=-1e9-5;
+        for(int i=0; i<C; ++i) {
+            for(int j=i; j<C; ++j) {
+                int mx=-1e9-5, so=0;
+                for(int k=0; k<R; ++k) {
+                    int now=pref[k][j+1]-pref[k][i];
+                    so=max(now, so+now);
+                    mx=max(mx, so);
                 }
+                ans=max(ans, mx);
             }
         }
-        printf("%d\n", ans);
+        return ans;
     }
- 
-    return 0;
-}
+};
