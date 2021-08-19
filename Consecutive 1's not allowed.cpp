@@ -1,22 +1,16 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-const int M=1e9+7;
- 
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        vector<int> dp0(n+1), dp1(n+1);
-        dp0[1]=dp1[1]=1;
-        for(int i=2; i<=n; ++i) {
-            dp0[i]=(dp0[i-1]+dp1[i-1])%M;
-            dp1[i]=dp0[i-1];
-        }
-        printf("%d\n", (dp0[n]+dp1[n])%M);
-    }
- 
-    return 0;
-}
+//User function template for C++
+class Solution{
+    const int M=1e9+7;
+public:
+	// #define ll long long
+	ll countStrings(int n) {
+	    ll dp[n+1][2];
+	    dp[0][0]=1;
+	    dp[0][1]=0;
+	    for(int i=1; i<=n; ++i) {
+	        dp[i][0]=(dp[i-1][0]+dp[i-1][1])%M;
+	        dp[i][1]=dp[i-1][0];
+	    }
+	    return (dp[n][0]+dp[n][1])%M;
+	}
+};
