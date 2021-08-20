@@ -1,22 +1,19 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-const int nax=1e5+5, M=1e9+7;
- 
-int main() {
-    vector<int> dp(nax);
-    dp[0]=1;
-    for(int i=0; i<nax-2; ++i) {
-        dp[i+1]=(dp[i+1]+dp[i])%M;
-        dp[i+2]=(dp[i+2]+dp[i])%M;
+class Solution
+{
+    const int M=1e9+7;
+    
+    public:
+    //Function to count number of ways to reach the nth stair.
+    int countWays(int n)
+    {
+        vector<long long> dp(n+1);
+        dp[0]=1;
+        for(int i=0; i<n; ++i) {
+            if(dp[i]) {
+                if(i+1<=n) dp[i+1]=(dp[i+1]+dp[i])%M;
+                if(i+2<=n) dp[i+2]=(dp[i+2]+dp[i])%M;
+            }
+        }
+        return dp[n];
     }
-	int t;
-	scanf("%d", &t);
-	while(t--) {
-	    int n;
-	    scanf("%d", &n);
-	    printf("%d\n", dp[n]);
-	}
- 
-    return 0;
-}
+};
