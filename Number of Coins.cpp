@@ -1,30 +1,20 @@
-#include <bits/stdc++.h>
-using namespace std;
+class Solution{
+    const int INF=1e9+5;
 
-#define INF 2e9
-
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int v,n;
-        scanf("%d%d", &v,&n);
-        vector<int> a(n), dp(v+1, INF);
-        for(int& i: a) {
-            scanf("%d", &i);
-        }
-        dp[0]=0;
-        for(int i=0; i<v; ++i) {
-            if(dp[i]!=INF) {
-                for(int j: a) {
-                    if(i+j<=v) {
-                        dp[i+j]=min(dp[i+j], 1+dp[i]);
-                    }
-                }
-            }
-        }
-        printf("%d\n", dp[v]==INF?-1:dp[v]);
-    }
-    
-    return 0;
-}
+	public:
+	int minCoins(int coins[], int M, int V) 
+	{
+	    vector<int> dp(V+1, INF);
+	    dp[0]=0;
+	    for(int i=1; i<=V; ++i) {
+	        for(int j=0; j<M; ++j) {
+	            if(i-coins[j]>=0) {
+	                dp[i]=min(dp[i], 1+dp[i-coins[j]]);
+	            }
+	        }
+	    }
+	    if(dp[V]>=INF) return -1;
+	    return dp[V];
+	} 
+	  
+};
