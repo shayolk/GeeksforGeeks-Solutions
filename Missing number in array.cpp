@@ -1,20 +1,13 @@
-#include <bits/stdc++.h>
-using namespace std;
+// User function template for C++
 
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        int ans=n,x;
+class Solution{
+  public:
+    int MissingNumber(vector<int>& array, int n) {
+        int x=n;
         for(int i=1; i<n; ++i) {
-            ans^=i;
-            scanf("%d", &x);
-            ans^=x;
+            x^=i;
+            x^=array[i-1];
         }
-        printf("%d\n", ans);
+        return x;
     }
-    
-    return 0;
-}
+};
