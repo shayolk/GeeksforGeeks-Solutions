@@ -1,32 +1,28 @@
-/*The function takes an adjacency matrix representation of the graph (g)
-and an integer(v) denoting the no of vertices as its arguments.
-You are required to complete below method */
-
-bool bfs(int start, int v, int g[][MAX], vector<int> &color)
-{
-    queue<int> q;
-    q.push(start);
-    color[start]=0;
-    while(!q.empty())
-    {
-        int node=q.front();
-        q.pop();
-        for(int i=0; i<v; ++i)  if(i!=node && g[node][i])
-        {
-            if(color[i]==color[node])   return false;
-            if(color[i]==-1)    color[i]=1^color[node], q.push(i);
+class Solution {
+    vector<int> color;
+    
+    bool check(int now, int col, int v, vector<int>adj[]) {
+        color[now]=col;
+        int here=true;
+        for(int neb: adj[now]) {
+            if(color[neb]!=-1) {
+                if(color[neb]==col) return false;
+                continue;
+            }
+            if(!check(neb, 1-col, v, adj)) return false;
         }
+        return true;
     }
-    return true;
-}
+    
+public:
+	bool isBipartite(int V, vector<int>adj[]){
+	    color.resize(V, -1);
+	    for(int i=0; i<V; ++i) {
+	        if(color[i]==-1) {
+	            if(!check(i, 0, V, adj)) return false;
+	        }
+	    }
+	    return true;
+	}
 
-bool isBipartite(int g[][MAX],int v)
-{
-    vector<int> color(v, -1);
-    for(int i=0; i<v; ++i) 
-    {
-        if(g[i][i]) return false;
-        if(color[i]==-1) if(!bfs(i,v,g,color)) return false;
-    }
-    return true;
-}
+};
