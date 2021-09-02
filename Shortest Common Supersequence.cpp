@@ -1,21 +1,18 @@
-#include <bits/stdc++.h>
-using namespace std;
+//User function template for C++
 
-int main() {
-    int t;
-    scanf("%d", &t);
-    char a[105], b[105];
-    while(t--) {
-        scanf("%s%s", &a,&b);
-        int n=strlen(a), m=strlen(b);
-        vector<vector<int>> lcs(n+1, vector<int> (m+1));
-        for(int i=1; i<=n; ++i) {
-            for(int j=1; j<=m; ++j) {
-                lcs[i][j]=(a[i-1]==b[j-1])?1+lcs[i-1][j-1]:max(lcs[i][j-1], lcs[i-1][j]);
+
+class Solution
+{
+    public:
+    //Function to find length of shortest common supersequence of two strings.
+    int shortestCommonSupersequence(string X, string Y, int m, int n)
+    {
+        vector<vector<int>> lcs(m+1, vector<int> (n+1));
+        for(int i=1; i<=m; ++i) {
+            for(int j=1; j<=n; ++j) {
+                lcs[i][j]=max({lcs[i][j-1], lcs[i-1][j], (X[i-1]==Y[j-1])+lcs[i-1][j-1]});
             }
         }
-        printf("%d\n", n+m-lcs[n][m]);
+        return m+n-lcs[m][n];
     }
-    
-    return 0;
-}
+};
