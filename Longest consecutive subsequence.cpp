@@ -1,31 +1,25 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        vector<int> a(n);
-        for(int& i:a) {
-            scanf("%d", &i);
-        }
-        sort(a.begin(), a.end());
-        int ans=0, now=1;
-        for(int i=1; i<n; ++i) {
-            if(a[i]==a[i-1]) continue;
-            if(a[i]-a[i-1]==1) {
-                ++now;
-            }
-            else {
-                ans=max(ans, now);
-                now=1;
-            }
-        }
-        ans=max(ans, now);
-        printf("%d\n", ans);
-    }
+class Solution{
+  public:
+    // arr[] : the input array
+    // N : size of the array arr[]
     
-    return 0;
-}
+    //Function to return length of longest subsequence of consecutive integers.
+    int findLongestConseqSubseq(int arr[], int N)
+    {
+        int mx=*max_element(arr, arr+N);
+        vector<int> cnt(mx+1);
+        for(int i=0; i<N; ++i) {
+            ++cnt[arr[i]];
+        }
+        int so=cnt[0]>0;
+        int ans=so;
+        for(int i=1; i<=mx; ++i) {
+            if(cnt[i]) {
+                if(cnt[i-1]) ++so;
+                else so=1;
+            }
+            ans=max(ans, so);
+        }
+        return ans;
+    }
+};
