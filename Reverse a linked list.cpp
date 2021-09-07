@@ -8,30 +8,17 @@ struct Node
 
 */
 
-// Should reverse list and return new head.
-
-Node* tail;
-
-void reverse(Node* t) {
-    if(!t->next) {
-        tail=t;
-        return;
+class Solution
+{
+    public:
+    //Function to reverse a linked list.
+    struct Node* reverseList(struct Node *head)
+    {
+        if(!head || !head->next) return head;
+        Node* h=reverseList(head->next);
+        head->next->next=head;
+        head->next=NULL;
+        return h;
     }
-    reverse(t->next);
-    t->next->next=t;
-    t->next=NULL;
-}
-
-struct Node* reverseList(struct Node *head) {
-    if(!head) return head;
-    reverse(head);
-    return tail;
-    // Node *prev=NULL, *curr=head, *next;
-    // while(curr) {
-    //     next=curr->next;
-    //     curr->next=prev;
-    //     prev=curr;
-    //     curr=next;
-    // }
-    // return prev;
-}
+    
+};
