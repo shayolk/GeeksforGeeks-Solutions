@@ -1,35 +1,21 @@
-#include <bits/stdc++.h>
-using namespace std;
+//User function template for C++
 
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        vector<int> a(n);
-        for(int& i:a) {
-            scanf("%d", &i);
-        }
-        vector<pair<int,int>> v;
-        int st=0, i=1;
-        while(i<n) {
-            if(a[i]<a[i-1]) {
-                if(st<i-1) v.push_back({st,i-1});
-                st=i;
+class Solution{
+public:
+    //Function to find the days of buying and selling stock for max profit.
+    vector<vector<int> > stockBuySell(vector<int> A, int n){
+        vector<vector<int>> ans;
+        int buy=0, sell=0;
+        for(int i=1; i<n; ++i) {
+            if(A[i]>=A[i-1]) {
+                sell=i;
             }
-            ++i;
+            else {
+                if(sell>buy) ans.push_back({buy, sell});
+                buy=i;
+            }
         }
-        if(st<i-1) v.push_back({st,i-1});
-        if(v.empty()) {
-            printf("No Profit\n");
-            continue;
-        }
-        for(auto j:v) {
-            printf("(%d %d) ", j.first,j.second);
-        }
-        printf("\n");
+        if(sell>buy) ans.push_back({buy, sell});
+        return ans;
     }
-    
-    return 0;
-}
+};
