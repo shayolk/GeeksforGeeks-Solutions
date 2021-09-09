@@ -1,31 +1,28 @@
 class Solution{
-    int partition(vector<int>& a, int lo, int hi) {
-        int pos=lo+rand()%(hi-lo+1);
-        swap(a[pos], a[hi]);
-        int i=lo;
-        for(int j=lo; j<hi; ++j) {
-            if(a[j]<=a[hi]) {
-                swap(a[i++], a[j]);
-            }
-        }
-        swap(a[i], a[hi]);
-        return i;
-    }
-    
-    int find(vector<int>& a, int lo, int hi, int k) {
-        if(lo>hi) return -1;
-        int pos=partition(a, lo, hi);
-        if(pos==k) return a[pos];
-        if(pos>k) return find(a, lo, pos-1, k);
-        else return find(a, pos+1, hi, k);
-    }
+    const int INF=1e9+5;
     
     public:
     int kthElement(int arr1[], int arr2[], int n, int m, int k)
     {
-        vector<int> a;
-        for(int i=0; i<n; ++i) a.push_back(arr1[i]);
-        for(int i=0; i<m; ++i) a.push_back(arr2[i]);
-        return find(a, 0, n+m-1, k-1);
+        if(n>m) return kthElement(arr2, arr1, m, n, k);
+        int lo=max(0, k-m), hi=min(n, k);
+        while(lo<=hi) {
+            int cut1=lo+(hi-lo)/2;
+            int cut2=k-cut1;
+            int l1=cut1<=0?-INF:arr1[cut1-1];
+            int r1=cut1>=n?INF:arr1[cut1];
+            int l2=cut2<=0?-INF:arr2[cut2-1];
+            int r2=cut2>=m?INF:arr2[cut2];
+            if(l1<=r2 && l2<=r1) {
+                return max(l1, l2);
+            }
+            if(l1>r2) {
+                hi=cut1-1;
+            }
+            else {
+                lo=cut1+1;
+            }
+        }
+        return -1;
     }
 };
