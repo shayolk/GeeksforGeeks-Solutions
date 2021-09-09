@@ -1,46 +1,29 @@
-#include <bits/stdc++.h>
-using namespace std;
+//User function template for C++
 
-#define ran(l,r) (l)+rand()%((r)-(l)+1)
-
-int part(vector<int>& a, int lo, int hi) {
-    int pos=ran(lo,hi);
-    swap(a[pos], a[hi]);
-    int x=a[hi], i=lo;
-    for(int j=lo; j<hi; ++j) {
-        if(a[j]<=x) {
-            swap(a[i++], a[j]);
+class Solution{
+    int partition(int a[], int lo, int hi) {
+        int pos=lo+rand()%(hi-lo+1);
+        swap(a[pos], a[hi]);
+        int i=lo;
+        for(int j=lo; j<hi; ++j) {
+            if(a[j]<=a[hi]) {
+                swap(a[i++], a[j]);
+            }
         }
-    }
-    swap(a[i], a[hi]);
-    return i;
-}
-
-int find(vector<int>& a, int lo, int hi, int k) {
-    int pos=part(a,lo,hi);
-    if(pos==k) {
-        return a[pos];
-    }
-    if(pos>k) {
-        return find(a,lo,pos-1,k);
-    }
-    return find(a,pos+1,hi,k);
-}
-
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        vector<int> a(n);
-        for(int& i:a) {
-            scanf("%d", &i);
-        }
-        int k;
-        scanf("%d", &k);
-        printf("%d\n", find(a,0,n-1,k-1));
+        swap(a[i], a[hi]);
+        return i;
     }
     
-    return 0;
-}
+    public:
+    // arr : given array
+    // l : starting index of the array i.e 0
+    // r : ending index of the array i.e size-1
+    // k : find kth smallest element and return using this function
+    int kthSmallest(int arr[], int l, int r, int k) {
+        if(l>r) return -1;
+        int pos=partition(arr, l, r);
+        if(pos==k-1) return arr[pos];
+        if(pos>k-1) return kthSmallest(arr, l, pos-1, k);
+        return kthSmallest(arr, pos+1, r, k);
+    }
+};
