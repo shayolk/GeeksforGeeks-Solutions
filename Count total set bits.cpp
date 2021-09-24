@@ -1,21 +1,17 @@
-#include <bits/stdc++.h>
-using namespace std;
+//User function Template for C++
 
-int main() {
-    vector<int> dp(1001);
-    for(int i=1; i<1001; ++i) {
-        dp[i]=dp[i-1];
+class Solution{
+    public:
+    // n: input to count the number of set bits
+    //Function to return sum of count of set bits in the integers from 1 to n.
+    int countSetBits(int n)
+    {
+        int cnt=0, p=1;
+        ++n;
         for(int bit=0; bit<31; ++bit) {
-            dp[i]+=(i&(1<<bit))!=0;
+            cnt+=(n/p/2)*p+max(0, n%(2*p)-p);
+            p*=2;
         }
+        return cnt;
     }
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        printf("%d\n", dp[n]);
-    }
-    
-    return 0;
-}
+};
