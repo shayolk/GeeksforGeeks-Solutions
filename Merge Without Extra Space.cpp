@@ -1,32 +1,29 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n,m;
-        scanf("%d%d", &n,&m);
-        vector<int> a(n), b(m);
-        for(int& i:a) {
-            scanf("%d", &i);
+class Solution{
+    int nextGap(int gap) {
+        if(gap<=1) {
+            return 0;
         }
-        a.push_back(2e9);
-        for(int& i:b) {
-            scanf("%d", &i);
-        }
-        b.push_back(2e9);
-        int i=0, j=0;
-        while(i<n || j<m) {
-            if(a[i]<b[j]) {
-                printf("%d ", a[i++]);
-            }
-            else {
-                printf("%d ", b[j++]);
-            }
-        }
-        printf("\n");
+        return gap/2+gap%2;
     }
-    
-    return 0;
-}
+    public:
+        //Function to merge the arrays.
+        void merge(long long arr1[], long long arr2[], int m, int n) 
+        {
+            int gap=nextGap(m+n+1);
+            while(gap) {
+                for(int i=0; i+gap<m+n; ++i) {
+                    int j=i+gap;
+                    if(i<m && j<m) {
+                        if(arr1[i]>arr1[j]) swap(arr1[i], arr1[j]);
+                    }
+                    else if(i<m && j>=m) {
+                        if(arr1[i]>arr2[j-m]) swap(arr1[i], arr2[j-m]);
+                    }
+                    else {
+                        if(arr2[i-m]>arr2[j-m]) swap(arr2[i-m], arr2[j-m]);
+                    }
+                }
+                gap=nextGap(gap);
+            }
+        } 
+};
