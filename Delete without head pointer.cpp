@@ -9,24 +9,17 @@ struct Node {
 }*head;
 */
 
-// This function should delete node from linked list. The function
-// may assume that node exists in linked list and is not last node
-// node: reference to the node which is to be deleted
-void deleteNode(Node *node) {
-    Node* t=node;
-    while(t && t->next && t->next->next) {
-        t->data=t->next->data;
-        t=t->next;
+
+class Solution
+{
+    public:
+    //Function to delete a node without any reference to head pointer.
+    void deleteNode(Node *del)
+    {
+        del->data=del->next->data;
+        Node *tmp=del->next;
+        del->next=tmp->next;
+        delete(tmp);
     }
-    t->data=t->next->data;
-    t->next=NULL;
-    // if(head && head==node) head=head->next;
-    // Node* t=head;
-    // while(t && t->next) {
-    //     if(t->next==node) {
-    //         t->next=t->next->next;
-    //         return;
-    //     }
-    //     t=t->next;
-    // }
-}
+
+};
