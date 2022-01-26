@@ -1,27 +1,22 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int n,m,e;
-vector<int> color;
-vector<vector<int>> adj;
-
-bool safe(int now, int c) {
-    for(int neb: adj[now]) {
-        if(color[neb]==c) {
+//Function to determine if graph can be coloured with at most M colours such
+//that no two adjacent vertices of graph are coloured with same colour.
+bool safe(int now, int c, int& n, vector<int>& color, bool adj[101][101]) {
+    for(int neb=0; neb<n; ++neb) {
+        if(neb!=now && adj[now][neb] && color[neb]==c) {
             return false;
         }
     }
     return true;
 }
 
-bool mcol(int now) {
+bool mcol(int now, int& n, int m, vector<int>& color, bool adj[101][101]) {
     if(now==n) {
         return true;
     }
     for(int c=0; c<m; ++c) {
-        if(safe(now,c)) {
+        if(safe(now, c, n, color, adj)) {
             color[now]=c;
-            if(mcol(now+1)) {
+            if(mcol(now+1, n, m, color, adj)) {
                 return true;
             }
             color[now]=-1;
@@ -30,23 +25,8 @@ bool mcol(int now) {
     return false;
 }
 
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        scanf("%d%d%d", &n,&m,&e);
-        adj.clear();
-        adj.resize(n);
-        for(int i=0; i<e; ++i) {
-            int x,y;
-            scanf("%d%d", &x,&y);
-            adj[--x].push_back(--y);
-            adj[y].push_back(x);
-        }
-        color.clear();
-        color.resize(n, -1);
-        printf("%d\n", mcol(0));
-    }
-    
-    return 0;
+bool graphColoring(bool graph[101][101], int m, int V)
+{
+    vector<int> color(V, -1);
+    return mcol(0, V, m, color, graph);
 }
