@@ -14,21 +14,22 @@ struct Node
  */
 
 //Function to return a list containing elements of left view of the binary tree.
-void visit(Node* root, int depth, map<int,bool>& done, vector<int>& ans) {
-    if(!root) return;
-    if(!done.count(depth)) {
-        done[depth]=true;
-        ans.push_back(root->data);
-    }
-    visit(root->left, depth+1, done, ans);
-    visit(root->right, depth+1, done, ans);
-    
-}
-
 vector<int> leftView(Node *root)
 {
-    map<int,bool> done;
-    vector<int> ans;
-    visit(root, 0, done, ans);
-    return ans;
+    map<int,int> view;
+        queue<pair<Node*, int>> q;
+        q.push({root, 0});
+        while(!q.empty()) {
+            pair<Node*, int> p=q.front();
+            q.pop();
+            if(!p.first) continue;
+            if(!view.count(p.second)) view[p.second]=p.first->data;
+            q.push({p.first->left, p.second+1});
+            q.push({p.first->right, p.second+1});
+        }
+        vector<int> ans;
+        for(auto v: view) {
+            ans.push_back(v.second);
+        }
+        return ans;
 }
