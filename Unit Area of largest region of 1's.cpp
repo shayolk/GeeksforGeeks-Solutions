@@ -1,49 +1,38 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int n,m;
-const int dr[]={0,0,-1,-1,-1,1,1,1};
-const int dc[]={-1,1,-1,0,1,-1,0,1};
-
-bool safe(int r, int c) {
-    return r>=0 && r<n && c>=0 && c<m;
-}
-
-void dfs(int i, int j, int& sum, vector<vector<int>>& a, vector<vector<bool>>& vis) {
-    vis[i][j]=true;
-    ++sum;
-    for(int k=0; k<8; ++k) {
-        int r=i+dr[k], c=j+dc[k];
-        if(safe(r,c) && a[r][c] && !vis[r][c]) {
-            dfs(r,c,sum,a,vis);
-        }
+class Solution
+{
+    const int dr[8]={0, 0, -1, -1, -1, 1, 1, 1};
+    const int dc[8]={-1, 1, -1, 0, 1, -1, 0, 1};
+    
+    int n,m;
+    
+    bool safe(int r, int c, vector<vector<int>>& grid) {
+        return r>=0 && r<n && c>=0 && c<m && grid[r][c]==1;
     }
-}
-
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        scanf("%d%d", &n,&m);
-        vector<vector<int>> a(n, vector<int>(m));
-        for(int i=0; i<n; ++i) {
-            for(int j=0; j<m; ++j) {
-                scanf("%d", &a[i][j]);
-            }
+    
+    int dfs(int r, int c, vector<vector<int>>& grid) {
+        grid[r][c]=-1;
+        int here=1;
+        for(int d=0; d<8; ++d) {
+            int rr=r+dr[d], cc=c+dc[d];
+            if(!safe(rr, cc, grid)) continue;
+            here+=dfs(rr, cc, grid);
         }
-        vector<vector<bool>> vis(n, vector<bool>(m));
+        return here;
+    }
+    
+    public:
+    //Function to find unit area of the largest region of 1s.
+    int findMaxArea(vector<vector<int>>& grid) {
+        n=grid.size();
+        m=grid[0].size();
         int ans=0;
         for(int i=0; i<n; ++i) {
             for(int j=0; j<m; ++j) {
-                if(a[i][j] && !vis[i][j]) {
-                    int now=0;
-                    dfs(i,j,now,a,vis);
-                    ans=max(ans, now);
+                if(grid[i][j]==1) {
+                    ans=max(ans, dfs(i, j, grid));
                 }
             }
         }
-        printf("%d\n", ans);
+        return ans;
     }
-    
-    return 0;
-}
+};
