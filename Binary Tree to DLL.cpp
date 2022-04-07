@@ -14,23 +14,23 @@ struct Node
  */
 
 // This function should return head to the DLL
-Node *head,*r;
-
-void in(Node* t) {
-    if(!t) return;
-    in(t->left);
-    Node* temp=new Node;
-    temp->data=t->data;
-    temp->left=r;
-    temp->right=NULL;
-    if(r) r->right=temp;
-    r=temp;
-    if(!head) head=r;
-    in(t->right);
-}
-
-Node* bToDLL(Node* root) {
-    head=r=NULL;
-    in(root);
-    return head;
-}
+class Solution
+{
+    pair<Node*,Node*> build(Node* root) {
+        if(!root) return {NULL, NULL};
+        pair<Node*,Node*> l=build(root->left), r=build(root->right);
+        root->left=l.second;
+        if(l.second) l.second->right=root;
+        root->right=r.first;
+        if(r.first) r.first->left=root;
+        Node* left=l.first?l.first:root;
+        Node* right=r.second?r.second:root;
+        return {left, right};
+    }
+    public: 
+    //Function to convert binary tree to doubly linked list and return it.
+    Node * bToDLL(Node *root)
+    {
+        return build(root).first;
+    }
+};
