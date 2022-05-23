@@ -1,51 +1,32 @@
-#include <bits/stdc++.h>
-using namespace std;
+// User function Template for C++
 
-// bool palin(char s[], int i, int j) {
-//     int cnt=(j-i+1)/2;
-//     for(int x=0; x<cnt; ++x) {
-//         if(s[i+x]!=s[j-x]) {
-//             return false;
-//         }
-//     }
-//     return true;
-// }
- 
-int main() {
-    int t;
-    scanf("%d", &t);
-    char s[1001];
-    while(t--) {
-        scanf("%s", &s);
-        int n=strlen(s);
-       // vector<vector<int>> dp(n, vector<int> (n));
-        vector<int> dp(n);
-        vector<vector<bool>> pal(n, vector<bool> (n, true));
-        for(int gap=1; gap<n; ++gap) {
-            for(int i=0; i+gap<n; ++i) {
+class Solution{
+public:
+    int palindromicPartition(string s)
+    {
+        int n=s.size();
+        vector<vector<bool>> pal(n+1, vector<bool> (n+1));
+        for(int i=1; i<=n; ++i) {
+            pal[i][i]=true;
+            if(i>1 && s[i-2]==s[i-1]) pal[i-1][i]=true;
+        }
+        for(int gap=2; gap<n; ++gap) {
+            for(int i=1; i+gap<=n; ++i) {
                 int j=i+gap;
-               // pal[i][j]=palin(s,i,j);
-                if(gap==1) {
-                    pal[i][j]=s[i]==s[j];
-                }
-                else {
-                    pal[i][j]=(s[i]==s[j]) && pal[i+1][j-1];
+                pal[i][j]=s[i-1]==s[j-1] && pal[i+1][j-1];
+            }
+        }
+        vector<int> dp(n+1);
+        dp[0]=dp[1]=0;
+        for(int i=2; i<=n; ++i) {
+            if(pal[1][i]) continue;
+            dp[i]=i-1;
+            for(int j=1; j<=i; ++j) {
+                if(pal[j][i]) {
+                    dp[i]=min(dp[i], 1+dp[j-1]);
                 }
             }
         }
-        for(int i=0; i<n; ++i) {
-            if(pal[0][i]) {
-                continue;
-            }
-            dp[i]=2e9;
-            for(int j=0; j<i; ++j) {
-                if(pal[j+1][i]) {
-                    dp[i]=min(dp[i], 1+dp[j]);
-                }
-            }
-        }
-        printf("%d\n", dp[n-1]);
+        return dp[n];
     }
- 
-    return 0;
-}
+};
