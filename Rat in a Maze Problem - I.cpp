@@ -1,42 +1,45 @@
-// User function template for C++
-
-class Solution{
-    int dr[4]={0, 0, 1, -1};
-    int dc[4]={1, -1, 0, 0};
-    char dir[4]={'R', 'L', 'D', 'U'};
+class Solution {
+    const int dr[4]  = {-1,   0,   0,  +1};
+    const int dc[4]  = { 0,  -1,  +1,   0};
+    const char ds[4] = {'U', 'L', 'R', 'D'};
+    
     int n;
     vector<vector<bool>> vis;
-    vector<string> ans;
+    vector<string> ways;
     
-    bool safe(int r, int c) {
-        return r>=0 && r<n && c>=0 && c<n;
+    bool safe(int row, int col, vector<vector<int>> &mat) {
+        return (row >= 0) && (row < n) && (col >= 0) && (col < n) 
+               && mat[row][col] && !vis[row][col];
     }
-    
-    void find(int i, int j, string& s, vector<vector<int>>& m) {
-        if(i==n-1 && j==n-1) {
-            ans.push_back(s);
-            return;
+
+    void traverse(int row, int col, string& way, vector<vector<int>> &mat) {
+        if(row == n-1 && col == n-1) {
+            ways.push_back(way);
         }
-        m[i][j]=0;
+        vis[row][col] = true;
         for(int d=0; d<4; ++d) {
-            int r=i+dr[d], c=j+dc[d];
-            if(!safe(r, c) || vis[r][c] || !m[r][c]) continue;
-            vis[r][c]=true;
-            s+=dir[d];
-            find(r, c, s, m);
-            s.pop_back();
-            vis[r][c]=false;
+            int r = row + dr[d];
+            int c = col + dc[d];
+            char s = ds[d];
+            if(!safe(r, c, mat)) {
+                continue;
+            }
+            way += s;
+            traverse(r, c, way, mat);
+            way.pop_back();
         }
-        m[i][j]=1;
+        vis[row][col] = false;
     }
-    
-    public:
-    vector<string> findPath(vector<vector<int>> &m, int n) {
-        if(!m[0][0]) return ans;
-        this->n=n;
+
+  public:
+    vector<string> findPath(vector<vector<int>> &mat) {
+        if(!mat[0][0]) {
+            return ways;
+        }
+        n = mat.size();
         vis.resize(n, vector<bool> (n));
-        string s;
-        find(0, 0, s, m);
-        return ans;
+        string way = "";
+        traverse(0, 0, way, mat);
+        return ways;
     }
 };
