@@ -1,32 +1,46 @@
-//Function to determine if graph can be coloured with at most M colours such
-//that no two adjacent vertices of graph are coloured with same colour.
-bool safe(int now, int c, int& n, vector<int>& color, bool adj[101][101]) {
-    for(int neb=0; neb<n; ++neb) {
-        if(neb!=now && adj[now][neb] && color[neb]==c) {
-            return false;
+class Solution {
+    int v;
+    int m;
+    vector<set<int>> nebs;
+    vector<int> col;
+    vector<bool> vis;
+    
+    bool safe(int now, int c) {
+        for(int neb: nebs[now]) {
+            if(col[neb] == c) {
+                return false;
+            }
         }
-    }
-    return true;
-}
-
-bool mcol(int now, int& n, int m, vector<int>& color, bool adj[101][101]) {
-    if(now==n) {
         return true;
     }
-    for(int c=0; c<m; ++c) {
-        if(safe(now, c, n, color, adj)) {
-            color[now]=c;
-            if(mcol(now+1, n, m, color, adj)) {
-                return true;
-            }
-            color[now]=-1;
+    
+    bool find(int now) {
+        if(now == v) {
+            return true;
         }
+        for(int c=0; c<m; ++c) {
+            if(safe(now, c)) {
+                col[now] = c;
+                if(find(now + 1)) {
+                    return true;
+                }
+                col[now] = -1;
+            }
+        }
+        return false;
     }
-    return false;
-}
 
-bool graphColoring(bool graph[101][101], int m, int V)
-{
-    vector<int> color(V, -1);
-    return mcol(0, V, m, color, graph);
-}
+  public:
+    bool graphColoring(int v, vector<pair<int, int>>& edges, int m) {
+        this->v = v;
+        this->m = m;
+        nebs.resize(v);
+        col.resize(v, -1);
+        vis.resize(v);
+        for(auto e: edges) {
+            nebs[e.first].insert(e.second);
+            nebs[e.second].insert(e.first);
+        }
+        return find(0);
+    }
+};
