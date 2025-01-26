@@ -13,32 +13,25 @@ struct Node
     }
 }; */
 
-// Method that returns the bottom view.
-void dfs(Node* root, map<int,pair<int,int>>& m, int dist, int height) {
-    if(!root) return;
-    if(!m.count(dist)) m[dist]={root->data,height};
-    else if(height>m[dist].second) m[dist]={root->data,height};
-    dfs(root->left,m,dist-1,height+1);
-    dfs(root->right,m,dist+1,height+1);
-}
+//Function to return a list containing the bottom view of the given tree.
 
-vector <int> bottomView(Node *root) {
-    // map<int,pair<int,int>> m;
-    // dfs(root,m,0,1);
-    map<int,int> m;
-    queue<pair<Node*,int>> q;
-    q.push({root,0});
-    while(!q.empty()) {
-        pair<Node*,int> p=q.front();
-        q.pop();
-        if(!p.first) continue;
-        m[p.second]=p.first->data;
-        q.push({p.first->left,p.second-1});
-        q.push({p.first->right,p.second+1});
+class Solution {
+  public:
+    vector <int> bottomView(Node *root) {
+        map<int,int> level;
+        queue<pair<Node*,int>> q;
+        q.push({root, 0});
+        while(!q.empty()) {
+            pair<Node*,int> p = q.front();
+            q.pop();
+            level[p.second] = p.first->data;
+            if(p.first->left) q.push({p.first->left, p.second - 1});
+            if(p.first->right) q.push({p.first->right, p.second + 1});
+        }
+        vector<int> view;
+        for(auto l: level) {
+            view.push_back(l.second);
+        }
+        return view;
     }
-    vector<int> bottom;
-    for(auto i:m) {
-        bottom.push_back(i.second);
-    }
-    return bottom;
-}
+};
