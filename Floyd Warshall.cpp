@@ -1,39 +1,19 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-#define INF 1e7
- 
-int main() {
-    int t;
-    scanf("%d", &t);
-    while(t--) {
-        int n;
-        scanf("%d", &n);
-        vector<vector<int>> adj(n, vector<int> (n));
-        for(int i=0; i<n; ++i) {
-            for(int j=0; j<n; ++j) {
-                scanf("%d", &adj[i][j]);
-            }
-        }
-        for(int k=0; k<n; ++k) {
-            for(int i=0; i<n; ++i) {
-                for(int j=0; j<n; ++j) {
-                    adj[i][j]=min(adj[i][j], adj[i][k]+adj[k][j]);
-                    if(k==n-1) {
-                        if(adj[i][j]==1e7) {
-                            printf("INF ");
-                        }
-                        else {
-                            printf("%d ", adj[i][j]);
-                        }
+class Solution {
+  public:
+    void shortestDistance(vector<vector<int>>& mat) {
+        int n = mat.size();
+        for(int k = 0; k < n; ++k) {
+            for(int i = 0; i < n; ++i) {
+                for(int j = 0; j < n; ++j) {
+                    if(mat[i][k] == -1 || mat[k][j] == -1) {
+                        continue;
                     }
-                }
-                if(k==n-1) {
-                    printf("\n");
+                    int poss_dist = mat[i][k] + mat[k][j];
+                    if(mat[i][j] == -1 || poss_dist < mat[i][j]) {
+                        mat[i][j] = poss_dist;
+                    }
                 }
             }
         }
     }
- 
-    return 0;
-}
+};
